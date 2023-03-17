@@ -14,4 +14,4 @@ x = np.linspace(-10,10,200)                         #Defines the range of x valu
 y = np.linspace(-10,10,200)                         #Defines the range of y values
 
 plt.plot(x, fitnessFunction(x,y), color='green')    #Plot the function 
-plt.show()
+#plt.show()
