@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 #Task 1.1
 #Function for defining mathematical function 
-def fitnessFunction(x, y):
+def fitnessFunction(x,y):
     return ((x+2*y-7)**2)+((2*x+y-5)**2)            #Defines the mathematical function we are working with (Optimizing)
 
 plt.rcParams["figure.figsize"] = [10, 5]            #Defines the figure    
