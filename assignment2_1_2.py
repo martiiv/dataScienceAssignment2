@@ -25,9 +25,15 @@ def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): 
     for i in range(populationSize):
         x = rand.randint(-10,10)                                # Defines the range of x values and picks one random value from the range 
         y = rand.randint(-10,10)                                # Defines the range of y values and picks one random value from the range
-        chromosomes.append((x,y))                               # Adds coordinate to list
-        binChrom.append((format(x, "b"), format(y, "b")))   # Adds coordinates in binary 
-
+        chromosomes.append((x,y))                             # Adds coordinate to list
+        if x<0 and y<0:
+            binChrom.append((f'{x:05b}', f'{y:05b}'))         # Adds coordinates in binary    
+        elif x<0 and y>0:
+            binChrom.append((f'{x:05b}', f'{y:04b}'))         # Adds coordinates in binary
+        elif x>0 and y<0:
+            binChrom.append((f'{x:04b}', f'{y:05b}'))         # Adds coordinates in binary
+        else:
+            binChrom.append((f'{x:04b}', f'{y:04b}'))         # Adds coordinates in binary
     
     print("List of values: "+str(chromosomes)+" \n")
     print("List of values in binary"+str(binChrom)+" \n")
