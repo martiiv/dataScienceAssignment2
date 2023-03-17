@@ -47,9 +47,7 @@ def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): 
         
     print(results)
     
-    
-
-    
+        
 populationSize = 4
 crossoverProb =0.5
 mutationProb =0.2
