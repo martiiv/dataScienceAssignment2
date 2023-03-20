@@ -33,12 +33,23 @@ def rouletteWheelSelection(populationSize, functionResults):
         probabilities.append(probability)
     return probabilities
 
+# Function handles "Reproduction" with gene crossover and mutation
 def crossover(numParents, numChrom, resultList, probabilities):
     numPairs = numParents/2
+    numPairs = int(numPairs)
+    throwAwayList = numChrom
     
+    pairs = []
+    while len(throwAwayList)>1: 
+        rnd = rand.randrange(0,len(throwAwayList))        
+        mom = throwAwayList.pop(rnd)
+        rnd = rand.randrange(0,len(throwAwayList))
+        dad = throwAwayList.pop(rnd)
+        
+        pairs.append((mom,dad))
+        
+            
     
-
-
 def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): #? We start by defining the main parameters we will use for the GA 
     printStartOfAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen)
     
@@ -47,12 +58,12 @@ def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): 
     binChrom = []
     
     for i in range(populationSize):
-        x = rand.randint(-10,10)                            #Defines the range of x values and picks one random value from the range 
-        y = rand.randint(-10,10)                            #Defines the range of y values and picks one random value from the range
-        chromosomes.append((x,y))                           #Adds coordinate to list
+        x = rand.randint(-10,10)                            # Defines the range of x values and picks one random value from the range 
+        y = rand.randint(-10,10)                            # Defines the range of y values and picks one random value from the range
+        chromosomes.append((x,y))                           # Adds coordinate to list
         
-        binaryStringX = f'{x:05b}'                          #We convert to binary 
-        binaryStringY = f'{y:05b}'                          # Since we are working with -10 to 10 values we use 4 binary spaces 
+        binaryStringX = f'{x:06b}'                          # We convert to binary 
+        binaryStringY = f'{y:06b}'                          # Since we are working with -10 to 10 values we use 4 binary spaces 
 
         if x<0 and y<0:                                     
             binaryStringX = binaryStringX.replace('-','1',1)
@@ -80,10 +91,11 @@ def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): 
     print("Results from fitness function:")
     
     for i in range(populationSize):
-        print("___________________________________________________________________________ \n")
+        print("____________________________________________________________________________________________________"+" \n")
         print("Result of value: "+str(chromosomes[i])+": "+ str(results[i])+"\n")
         print("Probability of value: "+str(chromosomes[i])+": "+ str(round(probabilities[i],3))+"\n")
     
+    crossover(populationSize, binChrom, results, probabilities)
         
 populationSize = 4
 crossoverProb =0.5
