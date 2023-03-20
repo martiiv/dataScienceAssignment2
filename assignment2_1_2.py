@@ -60,20 +60,12 @@ def speedDating(numParents, candidates):
         pairs.append((mom,dad))
     return pairs
 
-            
-    
-def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): #? We start by defining the main parameters we will use for the GA 
-    printStartOfAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen)
-    
-    #We start by defining and encoding the chromosomes for our GA, for defining the chromosomes we will be using the fitness function from 1.1
-    chromosomes = []
+#Function takes a list of x,y coordinates and returns a list of those coordinates in binary
+def convertToBinary(populationSize, chromosomes):
     binChrom = []
-    
     for i in range(populationSize):
-        x = rand.randint(-10,10)                            # Defines the range of x values and picks one random value from the range 
-        y = rand.randint(-10,10)                            # Defines the range of y values and picks one random value from the range
-        chromosomes.append((x,y))                           # Adds coordinate to list
-        
+        x = chromosomes[i][0]
+        y = chromosomes[i][1]
         binaryStringX = f'{x:06b}'                          # We convert to binary 
         binaryStringY = f'{y:06b}'                          # Since we are working with -10 to 10 values we use 4 binary spaces 
 
@@ -84,12 +76,25 @@ def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): 
             binaryStringX = binaryStringX.replace('-','1',1)
         elif x>0 and y<0:
             binaryStringY = binaryStringY.replace('-','1',1)
-        
-        binChrom.append((binaryStringX, binaryStringY))       #Adds coordinates in binary Neither is negative
+        binChrom.append((binaryStringX, binaryStringY))       #Adds coordinates in binary Neither is negative  
+    return binChrom  
+ 
+def crossover(parents, probability, mutation):
+    print("Starting crossover:")
+               
+    
+def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): #? We start by defining the main parameters we will use for the GA 
+    printStartOfAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen)
+    
+    #We start by defining and encoding the chromosomes for our GA, for defining the chromosomes we will be using the fitness function from 1.1
+    chromosomes = []
+    
+    for i in range(populationSize):
+        x = rand.randint(-10,10)                            # Defines the range of x values and picks one random value from the range 
+        y = rand.randint(-10,10)                            # Defines the range of y values and picks one random value from the range
+        chromosomes.append((x,y))                           # Adds coordinate to list
 
-        
     print("List of values: "+str(chromosomes)+" \n")            
-    print("List of values in binary"+str(binChrom)+" \n")
     
     results = []                                            #We define the results in a list
     for i in range(populationSize): 
@@ -118,6 +123,7 @@ def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): 
     for i in range(len(pairs)):
         print("Pair "+str(i+1)+" Mom:"+str(pairs[i][0])+" Dad:"+str(pairs[i][1])+"\n")
     
+    crossover(pairs, crossoverProb, mutationProb)           #Function will perform the Reproduction
  
             
 populationSize = 4
