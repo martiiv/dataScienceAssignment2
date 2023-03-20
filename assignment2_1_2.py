@@ -41,15 +41,14 @@ def selectParents(numCandidates, scores):
         prob = int((scores[i][1])*100)      
         probabilities.append(prob)
         
-    print("Selected candidates:")
     elements = rand.choices(candidates, weights=probabilities, k=numCandidates)  # We select k number of parents based on probabilities from above
     return elements                                                              # Returns the list of new candidates
 
 # Function handles "Reproduction" with gene crossover and mutation
-def speedDating(numParents, numChrom):
+def speedDating(numParents, candidates):
     numPairs = numParents/2
     numPairs = int(numPairs)
-    throwAwayList = numChrom
+    throwAwayList = candidates
     
     pairs = []
     while len(throwAwayList)>1: 
@@ -59,7 +58,7 @@ def speedDating(numParents, numChrom):
         dad = throwAwayList.pop(rnd)
         
         pairs.append((mom,dad))
-        
+    return pairs
 
             
     
@@ -110,11 +109,17 @@ def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): 
     
     #We now have the results for our parents, for parent selection we will select the same number of parents
     #? They will however be selected with the probabilities calculated in rouletteWheelSelection
-    candidates = selectParents(populationSize, chromAndProb)
+    candidates = selectParents(populationSize, chromAndProb) # Function selects candidates using probabilities 
     
-    #pairs = speedDating(populationSize, binChrom)
+    print("SELECTED CANDIDATES:")
+    print(str(candidates)+"\n")
+    print("Parents:")
+    pairs = speedDating(populationSize, candidates)          # Function pairs up the candidates as parents :)
+    for i in range(len(pairs)):
+        print("Pair "+str(i+1)+" Mom:"+str(pairs[i][0])+" Dad:"+str(pairs[i][1])+"\n")
     
-        
+ 
+            
 populationSize = 4
 crossoverProb =0.5
 mutationProb =0.2
