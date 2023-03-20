@@ -33,8 +33,12 @@ def rouletteWheelSelection(populationSize, functionResults):
         probabilities.append(probability)
     return probabilities
 
+def selectParents(numCandidates, scores, chromosomes):
+    print("Selecting new candidates")
+
+
 # Function handles "Reproduction" with gene crossover and mutation
-def crossover(numParents, numChrom, resultList, probabilities):
+def speedDating(numParents, numChrom):
     numPairs = numParents/2
     numPairs = int(numPairs)
     throwAwayList = numChrom
@@ -48,6 +52,7 @@ def crossover(numParents, numChrom, resultList, probabilities):
         
         pairs.append((mom,dad))
         
+
             
     
 def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): #? We start by defining the main parameters we will use for the GA 
@@ -85,17 +90,22 @@ def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): 
         yValue = chromosomes[i][1]                          #Defining y value
         value = fitnessFunction(xValue, yValue)             #Computing result of fitness function
         results.append(value)                               
-    
-    probabilities = rouletteWheelSelection(populationSize, results)
+    probabilities = rouletteWheelSelection(populationSize, results) #Computing probability for candidate selection
 
-    print("Results from fitness function:")
+    chromAndProb = []                                       # Linking the chromosomes with their computed probability
+    for i in range(populationSize):                 
+        chromAndProb.append((chromosomes[i], probabilities[i]))    
     
+    print("Results from fitness function: \n")              
     for i in range(populationSize):
-        print("____________________________________________________________________________________________________"+" \n")
-        print("Result of value: "+str(chromosomes[i])+": "+ str(results[i])+"\n")
-        print("Probability of value: "+str(chromosomes[i])+": "+ str(round(probabilities[i],3))+"\n")
+        print("Chromosome: "+str(chromAndProb[i][0])+"   Result:"+str(results[i])+" Calculated probability: "+str(chromAndProb[i][1])+"\n")
     
-    crossover(populationSize, binChrom, results, probabilities)
+    #We now have the results for our parents, for parent selection we will select the same number of parents
+    #? They will however be selected with the probabilities calculated in rouletteWheelSelection
+    candidates = selectParents(populationSize, chromAndProb, binChrom)
+    
+    #pairs = speedDating(populationSize, binChrom)
+    
         
 populationSize = 4
 crossoverProb =0.5
