@@ -85,17 +85,48 @@ def convertToBinary(pairs):                                     #! This is bad c
         parentBinaries.append(binaryPair)
     return parentBinaries  
  
+def combineGenes(genePair, probability,mutation):
+    
+    for i in range(len(genePair)-1): 
+        parent1X = genePair[i][0]        
+        parent1Y = genePair[i][1]      
+        
+        parent2X = genePair[i+1][0]
+        parent2Y = genePair[i+1][1]
+        
+        for j in range(len(parent1X)):
+            print(parent1X[j])
+            print(parent2X[j])
+            
+        
+        j = 0
+        
+        for j in range(len(parent1Y)):
+            parent1Y[i]
+            parent2Y[i]
+    
 def crossover(parents, probability, mutation):
     print("Starting crossover:")
-    for j in range(len(parents)):
-        pair = parents[j]
-        for i in range(len(pair)):
-            parent1 = (pair[i][0]).split()
-            parent2 = (pair[i][1]).split()
-        print("Dad:"+str(j+1)+" Genes: "+str(pair[i])+"\n")
-        print("Mom:"+str(j+1)+" Genes: "+str(pair[i])+"\n")
+    children = []
+    
+    for j in range(len(parents)):               # For each pair
+        pair = parents[j]                       # Pair with 2 coordinates each Pair: [{x,y},{x,y}]
+        genePair = []                         
         
+        for i in range(len(pair)):              #For each parent in the pair (2)   
+        
+            genex = (pair[i][0])                # Take the parents gene X                   
+            xList = []
+            xList[:0] = genex                   # Convert it to list
             
+            geney = (pair[i][1])                # Take parents gene Y
+            yList = []
+            yList[:0] = geney                   # Convert it to list
+                        
+            genePair.append((xList, yList))     # Add the pair of genes to the list
+        combineGenes(genePair,0,0)            
+        
+
         
     
 def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): #? We start by defining the main parameters we will use for the GA 
@@ -139,7 +170,6 @@ def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): 
         print("Pair "+str(i+1)+" Mom:"+str(pairs[i][0])+" Dad:"+str(pairs[i][1])+"\n")
         
     binaries = convertToBinary(pairs)
-    
     crossover(binaries, crossoverProb, mutationProb)           #Function will perform the Reproduction
  
             
