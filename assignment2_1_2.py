@@ -61,13 +61,13 @@ def speedDating(numParents, candidates):
     return pairs
 
 #Function takes a list of x,y coordinates and returns a list of those coordinates in binary
-def convertToBinary(pairs):
+def convertToBinary(pairs):                                     #! This is bad code i know!
     parentBinaries = []
     for i in range(len(pairs)):
         binaryPair = []
+        
         pair = pairs[i]
         for i in range(len(pair)):
-            
             x = pair[i][0]
             y = pair[i][1]
             binaryStringX = f'{x:06b}'                          # We convert to binary 
@@ -83,18 +83,17 @@ def convertToBinary(pairs):
             binaryPair.append((binaryStringX, binaryStringY))       #Adds coordinates in binary Neither is negative  
             
         parentBinaries.append(binaryPair)
-        
     return parentBinaries  
  
 def crossover(parents, probability, mutation):
-    
     print("Starting crossover:")
-    for i in range(len(parents)):
-        parent1 = (parents[i][0]).split("")
-        parent2 = (parents[i][1]).split("")
-
-        print(str(parent1)+"\n")
-        print(str(parent2)+"\n")
+    for j in range(len(parents)):
+        pair = parents[j]
+        for i in range(len(pair)):
+            parent1 = (pair[i][0]).split()
+            parent2 = (pair[i][1]).split()
+        print("Dad:"+str(j+1)+" Genes: "+str(pair[i])+"\n")
+        print("Mom:"+str(j+1)+" Genes: "+str(pair[i])+"\n")
         
             
         
@@ -141,7 +140,7 @@ def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): 
         
     binaries = convertToBinary(pairs)
     
-    #rossover(binaries, crossoverProb, mutationProb)           #Function will perform the Reproduction
+    crossover(binaries, crossoverProb, mutationProb)           #Function will perform the Reproduction
  
             
 populationSize = 4
