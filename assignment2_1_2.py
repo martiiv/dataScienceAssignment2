@@ -61,27 +61,43 @@ def speedDating(numParents, candidates):
     return pairs
 
 #Function takes a list of x,y coordinates and returns a list of those coordinates in binary
-def convertToBinary(populationSize, chromosomes):
-    binChrom = []
-    for i in range(populationSize):
-        x = chromosomes[i][0]
-        y = chromosomes[i][1]
-        binaryStringX = f'{x:06b}'                          # We convert to binary 
-        binaryStringY = f'{y:06b}'                          # Since we are working with -10 to 10 values we use 4 binary spaces 
+def convertToBinary(pairs):
+    parentBinaries = []
+    for i in range(len(pairs)):
+        binaryPair = []
+        pair = pairs[i]
+        for i in range(len(pair)):
+            
+            x = pair[i][0]
+            y = pair[i][1]
+            binaryStringX = f'{x:06b}'                          # We convert to binary 
+            binaryStringY = f'{y:06b}'                          # Since we are working with -10 to 10 values we use 4 binary spaces 
 
-        if x<0 and y<0:                                     
-            binaryStringX = binaryStringX.replace('-','1',1)
-            binaryStringY = binaryStringY.replace('-','1',1)
-        elif x<0 and y>0:
-            binaryStringX = binaryStringX.replace('-','1',1)
-        elif x>0 and y<0:
-            binaryStringY = binaryStringY.replace('-','1',1)
-        binChrom.append((binaryStringX, binaryStringY))       #Adds coordinates in binary Neither is negative  
-    return binChrom  
+            if x<0 and y<0:                                     
+                binaryStringX = binaryStringX.replace('-','1',1)
+                binaryStringY = binaryStringY.replace('-','1',1)
+            elif x<0 and y>0:
+                binaryStringX = binaryStringX.replace('-','1',1)
+            elif x>0 and y<0:
+                binaryStringY = binaryStringY.replace('-','1',1)
+            binaryPair.append((binaryStringX, binaryStringY))       #Adds coordinates in binary Neither is negative  
+            
+        parentBinaries.append(binaryPair)
+        
+    return parentBinaries  
  
 def crossover(parents, probability, mutation):
+    
     print("Starting crossover:")
-               
+    for i in range(len(parents)):
+        parent1 = (parents[i][0]).split("")
+        parent2 = (parents[i][1]).split("")
+
+        print(str(parent1)+"\n")
+        print(str(parent2)+"\n")
+        
+            
+        
     
 def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): #? We start by defining the main parameters we will use for the GA 
     printStartOfAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen)
@@ -122,8 +138,10 @@ def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): 
     pairs = speedDating(populationSize, candidates)          # Function pairs up the candidates as parents :)
     for i in range(len(pairs)):
         print("Pair "+str(i+1)+" Mom:"+str(pairs[i][0])+" Dad:"+str(pairs[i][1])+"\n")
+        
+    binaries = convertToBinary(pairs)
     
-    crossover(pairs, crossoverProb, mutationProb)           #Function will perform the Reproduction
+    #rossover(binaries, crossoverProb, mutationProb)           #Function will perform the Reproduction
  
             
 populationSize = 4
