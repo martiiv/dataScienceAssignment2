@@ -266,7 +266,11 @@ def geneticAlgorithm(chromosomes, populationSize, crossoverProb, mutationProb, n
     currentGen = currentGen+1
     if currentGen == numberOfGen:
         print("Final children:"+str(newNumbers))
-        
+        finalResult = []
+        for i in newNumbers:
+            value = fitnessFunction(i[0],i[1])
+            finalResult.append(value)
+        print(finalResult)
         return
     else:
         print(currentGen)
@@ -279,14 +283,10 @@ crossoverProb =0.25
 mutationProb =0.05
 numberOfGen = 100
 
-#We start by defining and encoding the chromosomes for our GA, for defining the chromosomes we will be using the fitness function from 1.1
-chromosomes = []
-    
+chromosomes = []    
 for i in range(populationSize):
     x = rand.randint(-10,10)                            # Defines the range of x values and picks one random value from the range 
     y = rand.randint(-10,10)                            # Defines the range of y values and picks one random value from the range
     chromosomes.append((x,y))                           # Adds coordinate to list
 
 geneticAlgorithm(chromosomes, populationSize, crossoverProb, mutationProb, numberOfGen, 0)
-
-fitnessFunction()
