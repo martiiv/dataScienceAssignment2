@@ -84,62 +84,58 @@ def convertToBinary(pairs):                                     #! This is bad c
             
         parentBinaries.append(binaryPair)
     return parentBinaries  
- 
-def combineGenes(genePair, probability):
-    for i in range(len(genePair)-1): 
-        children = []
 
-        parent1X = genePair[i][0]        
-        parent1Y = genePair[i][1]      
-        
+# Function swaps genes based on probability  
+def combineGenes(genePair, probability):
+    for i in range(len(genePair)-1):                # For each pair (number of parents/population)
+        children = []                               # ! Update with global parameters this is spaghetti
+
+        parent1X = genePair[i][0]                   # We define the different genes in each pair of parents
+        parent1Y = genePair[i][1]                   
         parent2X = genePair[i+1][0]
         parent2Y = genePair[i+1][1]
         
-        for j in range(len(parent1X)):
-            crossX = rand.random() < probability
+        for j in range(len(parent1X)):              #! For the length of our binary update with global variable 
+            crossX = rand.random() < probability    # A bool value which decides if we crossover using probability
         
-            if crossX is True:
-                gene1 = parent1X[j]
-                gene2 = parent2X[j]
+            if crossX is True:                      # If it returns true we cross over!
+                gene1 = parent1X[j]                 # Defines one part of gene (one binary position)
+                gene2 = parent2X[j]                 # We define both of the X genes value
                 
-                parent1X[j] = gene2 
-                parent2X[j] = gene1
+                parent1X[j] = gene2                 # And swap accordingly
+                parent2X[j] = gene1                 # ! This is horrible code but i am bad at python!
                 
-                gene1 = parent1Y[j]
+                gene1 = parent1Y[j]                 # Repeat for Y gene
                 gene2 = parent2Y[j]
                     
                 parent1Y[j] = gene2 
                 parent2Y[j] = gene1
             
+        #New Child!
+        child1X = ''.join(parent1X)                 # We join the binary lists to one string and define child
+        child1Y = ''.join(parent1Y)                 # ?We still keep the (x,y) format 
+         
+        #New Child!
+        child2X = ''.join(parent2X)                 # Repeat for child 2
+        child2Y = ''.join(parent2Y)                 
         
-        child1X = parent1X
-        child1X = ''.join(child1X)
-        
-        child2X = parent2X
-        child2X = ''.join(child2X)
-        
-        child1Y = parent1Y
-        child1Y = ''.join(child1Y)
-        
-        child2Y = parent2Y
-        child2Y = ''.join(child2Y)   
-        
-        children.append((child1X, child1Y))
-        children.append((child2X,child2Y))
-    return children
+        children.append((child1X, child1Y))         # We add new child to list
+        children.append((child2X,child2Y))          # Repeat for child 2 
+    #! This works in pairs of parents so it should work for higher populations than 4
+    
+    return children                                 # We return the list of new children
 
-def mutateChildren(children, mutationPorbability):
-    print(children)
+def mutateChildren(children, mutationProbability):
     for i in children:
         child = children[i][0]
+        
         for j in range(child):
             geneX = child[i][0]
             geneY = child[i][1]
            
 
 
-def crossover(parents, probability, mutation):
-    print("Starting crossover:")
+def crossover(parents, probability):
     childCandidates = []
     
     for j in range(len(parents)):               # For each pair
@@ -157,12 +153,12 @@ def crossover(parents, probability, mutation):
             yList[:0] = geney                   # Convert it to list
                         
             genePair.append((xList, yList))     # Add the pair of genes to the list
-        children = combineGenes(genePair,probability) 
+        children = combineGenes(genePair,probability)  # Function will swap genes based on set probability
         
-        childCandidates.append(children[i-1])
-        childCandidates.append(children[i])       
+        childCandidates.append(children[i-1])     #Adds the pairs of children
+        childCandidates.append(children[i])         
+    return childCandidates
                 
-    finishedCandidates = mutateChildren(childCandidates, mutation)        
     
 def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): #? We start by defining the main parameters we will use for the GA 
     printStartOfAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen)
@@ -192,6 +188,8 @@ def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): 
     print("Results from fitness function: \n")              
     for i in range(populationSize):
         print("Chromosome: "+str(chromAndProb[i][0])+"   Result:"+str(results[i])+" Calculated probability: "+str(chromAndProb[i][1])+"\n")
+        
+    print("_____________________________________________________________________________________ \n")
     
     #We now have the results for our parents, for parent selection we will select the same number of parents
     #? They will however be selected with the probabilities calculated in rouletteWheelSelection
@@ -199,19 +197,27 @@ def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): 
     
     print("SELECTED CANDIDATES:")
     print(str(candidates)+"\n")
-    print("Parents:")
+    print("_____________________________________________________________________________________ \n")
+    print("Parents: \n")
+    
     pairs = speedDating(populationSize, candidates)          # Function pairs up the candidates as parents :)
-        
-    binaries = convertToBinary(pairs)
+    binaries = convertToBinary(pairs)                        # Converts pairs to binary
     
     for i in range(len(pairs)):
         print("Pair "+str(i+1)+":\n")
-        print("Mom:"+str(pairs[i][0])+"Binary: "+str(binaries[i][0])+"\n")
-        print("Dad:"+str(pairs[i][1])+"Binary: "+str(binaries[i][1])+"\n")
-        print("_____________________________________________________________________________________")
-        
-    crossover(binaries, crossoverProb, mutationProb)           #Function will perform the Reproduction
- 
+        print("Mom:"+str(pairs[i][0])+" Binary: "+str(binaries[i][0])+"\n")
+        print("Dad:"+str(pairs[i][1])+" Binary: "+str(binaries[i][1])+"\n")
+    print("_____________________________________________________________________________________ \n")
+    
+    crossedChildren = crossover(binaries, crossoverProb)           #Function will perform the Reproduction
+    
+    print("Crossover done!\n")
+    print("Produced Children: \n")
+    for i in range(populationSize):
+        print("Child: "+str(i+1)+", Gene: "+str(crossedChildren[i])+"\n")
+    print("_____________________________________________________________________________________ \n")
+    
+    newCandidates = mutateChildren(crossedChildren, mutationProb)
             
 populationSize = 4
 crossoverProb =0.5
