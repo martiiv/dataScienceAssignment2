@@ -204,84 +204,87 @@ def convertToNumbers(candidates, populationSize):
     return candidateNumbers
           
     
-def geneticAlgorithm(chromosomes, populationSize, crossoverProb, mutationProb, numberOfGen, currentGen): #? We start by defining the main parameters we will use for the GA 
-    
+def geneticAlgorithm(chromosomes, populationSize, crossoverProb, mutationProb, numberOfGen): #? We start by defining the main parameters we will use for the GA 
     printStartOfAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen)
     
-    print("List of values: "+str(chromosomes)+" \n")            
-    
-    results = []                                            #We define the results in a list
-    for i in range(populationSize): 
-        xValue = chromosomes[i][0]                          #Defining x value
-        yValue = chromosomes[i][1]                          #Defining y value
-        value = fitnessFunction(xValue, yValue)             #Computing result of fitness function
-        results.append(value)                               
-    probabilities = rouletteWheelSelection(populationSize, results) #Computing probability for candidate selection
-
-    chromAndProb = []                                       # Linking the chromosomes with their computed probability
-    for i in range(populationSize):                 
-        chromAndProb.append((chromosomes[i], probabilities[i]))    
-    
-    print("Results from fitness function: \n")              
-    for i in range(populationSize): 
-        print("Chromosome: "+str(chromAndProb[i][0])+"   Result:"+str(results[i])+" Calculated probability: "+str(round(chromAndProb[i][1],2)*100)+"% \n")
+    currentGen = 0
+    for i in range(numberOfGen):
+        currentGen = currentGen+1
         
-    print("_____________________________________________________________________________________ \n")
-    
-    #We now have the results for our parents, for parent selection we will select the same number of parents
-    #? They will however be selected with the probabilities calculated in rouletteWheelSelection
-    candidates = selectParents(populationSize, chromAndProb) # Function selects candidates using probabilities 
-    
-    print("SELECTED CANDIDATES:")
-    print(str(candidates)+"\n")
-    print("_____________________________________________________________________________________ \n")
-    print("Parents: \n")
-    
-    pairs = speedDating(populationSize, candidates)          # Function pairs up the candidates as parents :)
-    binaries = convertToBinary(pairs)                        # Converts pairs to binary
-    
-    for i in range(len(pairs)):
-        print("Pair "+str(i+1)+":\n")
-        print("Mom:"+str(pairs[i][0])+" Binary: "+str(binaries[i][0])+"\n")
-        print("Dad:"+str(pairs[i][1])+" Binary: "+str(binaries[i][1])+"\n")
-    print("_____________________________________________________________________________________ \n")
-    
-    crossedChildren = crossover(binaries, crossoverProb)           #Function will perform the Reproduction
-    
-    print("Crossover done!\n")
-    print("Produced Children: \n")
-    for i in range(populationSize):
-        print("Child: "+str(i+1)+", Gene: "+str(crossedChildren[i])+"\n")
-    print("_____________________________________________________________________________________ \n")
-    
-    newCandidates = mutateChildren(crossedChildren, mutationProb)
-    
-    print("Mutation done!\n")
-    print("Mutated Children: \n")
-    for i in range(populationSize):
-        print("Child: "+str(i+1)+", Gene: "+str(newCandidates[i])+"\n")
-    print("_____________________________________________________________________________________ \n")
-    
-    newNumbers = convertToNumbers(newCandidates, populationSize)
-    currentGen = currentGen+1
-    if currentGen == numberOfGen:
-        print("Final children:"+str(newNumbers))
-        finalResult = []
-        for i in newNumbers:
-            value = fitnessFunction(i[0],i[1])
-            finalResult.append(value)
-        print(finalResult)
-        return
-    else:
-        print(currentGen)
-        geneticAlgorithm(newNumbers, populationSize, crossoverProb, mutationProb, numberOfGen, currentGen)
+        print("List of values: "+str(chromosomes)+" \n")            
+        
+        results = []                                            #We define the results in a list
+        for i in range(populationSize): 
+            xValue = chromosomes[i][0]                          #Defining x value
+            yValue = chromosomes[i][1]                          #Defining y value
+            value = fitnessFunction(xValue, yValue)             #Computing result of fitness function
+            results.append(value)                               
+        probabilities = rouletteWheelSelection(populationSize, results) #Computing probability for candidate selection
+
+        chromAndProb = []                                       # Linking the chromosomes with their computed probability
+        for i in range(populationSize):                 
+            chromAndProb.append((chromosomes[i], probabilities[i]))    
+        
+        print("Results from fitness function: \n")              
+        for i in range(populationSize): 
+            print("Chromosome: "+str(chromAndProb[i][0])+"   Result:"+str(results[i])+" Calculated probability: "+str(round(chromAndProb[i][1],2)*100)+"% \n")
+            
+        print("_____________________________________________________________________________________ \n")
+        
+        #We now have the results for our parents, for parent selection we will select the same number of parents
+        #? They will however be selected with the probabilities calculated in rouletteWheelSelection
+        candidates = selectParents(populationSize, chromAndProb) # Function selects candidates using probabilities 
+        
+        print("SELECTED CANDIDATES:")
+        print(str(candidates)+"\n")
+        print("_____________________________________________________________________________________ \n")
+        print("Parents: \n")
+        
+        pairs = speedDating(populationSize, candidates)          # Function pairs up the candidates as parents :)
+        binaries = convertToBinary(pairs)                        # Converts pairs to binary
+        
+        for i in range(len(pairs)):
+            print("Pair "+str(i+1)+":\n")
+            print("Mom:"+str(pairs[i][0])+" Binary: "+str(binaries[i][0])+"\n")
+            print("Dad:"+str(pairs[i][1])+" Binary: "+str(binaries[i][1])+"\n")
+        print("_____________________________________________________________________________________ \n")
+        
+        crossedChildren = crossover(binaries, crossoverProb)           #Function will perform the Reproduction
+        
+        print("Crossover done!\n")
+        print("Produced Children: \n")
+        for i in range(populationSize):
+            print("Child: "+str(i+1)+", Gene: "+str(crossedChildren[i])+"\n")
+        print("_____________________________________________________________________________________ \n")
+        
+        newCandidates = mutateChildren(crossedChildren, mutationProb)
+        
+        print("Mutation done!\n")
+        print("Mutated Children: \n")
+        for i in range(populationSize):
+            print("Child: "+str(i+1)+", Gene: "+str(newCandidates[i])+"\n")
+        print("_____________________________________________________________________________________ \n")
+        
+        newNumbers = convertToNumbers(newCandidates, populationSize)
+        
+        if currentGen == numberOfGen:
+            print("Final children:"+str(newNumbers))
+            finalResult = []
+            for i in newNumbers:
+                value = fitnessFunction(i[0],i[1])
+                finalResult.append(value)
+            print(finalResult)
+            return
+        else:
+            print("Current generation: "+str(currentGen)+"\n")
+            chromosomes = newNumbers
         
     
             
-populationSize = 4
-crossoverProb =0.25
-mutationProb =0.05
-numberOfGen = 100
+populationSize = 10
+crossoverProb =0.50
+mutationProb =0.25
+numberOfGen = 1000
 
 chromosomes = []    
 for i in range(populationSize):
@@ -289,4 +292,4 @@ for i in range(populationSize):
     y = rand.randint(-10,10)                            # Defines the range of y values and picks one random value from the range
     chromosomes.append((x,y))                           # Adds coordinate to list
 
-geneticAlgorithm(chromosomes, populationSize, crossoverProb, mutationProb, numberOfGen, 0)
+geneticAlgorithm(chromosomes, populationSize, crossoverProb, mutationProb, numberOfGen)
