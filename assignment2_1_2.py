@@ -85,10 +85,7 @@ def convertToBinary(pairs):                                     #! This is bad c
         parentBinaries.append(binaryPair)
     return parentBinaries  
  
-def combineGenes(genePair, probability,mutation):
-    pairsOfChildren = []
-    print("Crossover probability:" +str(probability))
-
+def combineGenes(genePair, probability):
     for i in range(len(genePair)-1): 
         children = []
 
@@ -117,20 +114,33 @@ def combineGenes(genePair, probability,mutation):
         
         child1X = parent1X
         child1X = ''.join(child1X)
+        
         child2X = parent2X
         child2X = ''.join(child2X)
+        
         child1Y = parent1Y
         child1Y = ''.join(child1Y)
+        
         child2Y = parent2Y
         child2Y = ''.join(child2Y)   
         
         children.append((child1X, child1Y))
         children.append((child2X,child2Y))
-    print(children)
     return children
-    
+
+def mutateChildren(children, mutationPorbability):
+    print(children)
+    for i in children:
+        child = children[i][0]
+        for j in range(child):
+            geneX = child[i][0]
+            geneY = child[i][1]
+           
+
+
 def crossover(parents, probability, mutation):
     print("Starting crossover:")
+    childCandidates = []
     
     for j in range(len(parents)):               # For each pair
         pair = parents[j]                       # Pair with 2 coordinates each Pair: [{x,y},{x,y}]
@@ -147,10 +157,12 @@ def crossover(parents, probability, mutation):
             yList[:0] = geney                   # Convert it to list
                         
             genePair.append((xList, yList))     # Add the pair of genes to the list
-        combineGenes(genePair,probability,0)            
+        children = combineGenes(genePair,probability) 
         
-
-        
+        childCandidates.append(children[i-1])
+        childCandidates.append(children[i])       
+                
+    finishedCandidates = mutateChildren(childCandidates, mutation)        
     
 def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): #? We start by defining the main parameters we will use for the GA 
     printStartOfAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen)
