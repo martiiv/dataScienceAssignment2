@@ -126,14 +126,33 @@ def combineGenes(genePair, probability):
     return children                                 # We return the list of new children
 
 def mutateChildren(children, mutationProbability):
-    for i in children:
-        child = children[i][0]
+    newCandidates = []                              # We define list of new candidates
+    
+    for i in children:                              # For each child
+        child = i                                   # We define the child 
+        completedChild = []                         # And a list with the two genes
         
-        for j in range(child):
-            geneX = child[i][0]
-            geneY = child[i][1]
-           
-
+        for j in child:                             # For Each gene 
+            #print("GENE:"+str(j))                  # ! Uncomment for clarity regarding mutation
+            geneList = []                           # We will split the gene into a list  
+            geneList[:0] = j                        # To easily swap values 
+            # !Note this might be really inefficent IDK!
+            
+            for i in range(len(geneList)):
+                mutate = rand.random() < mutationProbability    # A bool value which decides if we crossover using probability
+                if mutate is True:                              # If the mutate value is true 
+                    #print("MUTATION!")                         # ! Uncomment for clarity regarding mutation
+                    if geneList[i] == "0":                      # We change the value!
+                        geneList[i] = "1"                   
+                    else:
+                        geneList[i] = "0"
+                #else: print("No Mutation!")                    # ! Uncomment for clarity regarding mutation
+                
+            newGene = ''.join(geneList)                         # We join the gene list to one string again
+            completedChild.append(newGene)                      # And add it to the new and mutated child
+        newCandidates.append((completedChild[0], completedChild[1])) #Lastly we add the new children to the list of new candidates!
+        
+    return newCandidates    
 
 def crossover(parents, probability):
     childCandidates = []
@@ -218,6 +237,14 @@ def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): 
     print("_____________________________________________________________________________________ \n")
     
     newCandidates = mutateChildren(crossedChildren, mutationProb)
+    
+    print("Mutation done!\n")
+    print("Mutated Children: \n")
+    for i in range(populationSize):
+        print("Child: "+str(i+1)+", Gene: "+str(newCandidates[i])+"\n")
+    print("_____________________________________________________________________________________ \n")
+    
+    
             
 populationSize = 4
 crossoverProb =0.5
@@ -225,3 +252,5 @@ mutationProb =0.2
 numberOfGen = 10
 geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen)
 
+for i in range(numberOfGen):
+    geneticAlgorithm()
