@@ -86,8 +86,12 @@ def convertToBinary(pairs):                                     #! This is bad c
     return parentBinaries  
  
 def combineGenes(genePair, probability,mutation):
-    
+    pairsOfChildren = []
+    print("Crossover probability:" +str(probability))
+
     for i in range(len(genePair)-1): 
+        children = []
+
         parent1X = genePair[i][0]        
         parent1Y = genePair[i][1]      
         
@@ -95,19 +99,38 @@ def combineGenes(genePair, probability,mutation):
         parent2Y = genePair[i+1][1]
         
         for j in range(len(parent1X)):
-            print(parent1X[j])
-            print(parent2X[j])
+            crossX = rand.random() < probability
+        
+            if crossX is True:
+                gene1 = parent1X[j]
+                gene2 = parent2X[j]
+                
+                parent1X[j] = gene2 
+                parent2X[j] = gene1
+                
+                gene1 = parent1Y[j]
+                gene2 = parent2Y[j]
+                    
+                parent1Y[j] = gene2 
+                parent2Y[j] = gene1
             
         
-        j = 0
+        child1X = parent1X
+        child1X = ''.join(child1X)
+        child2X = parent2X
+        child2X = ''.join(child2X)
+        child1Y = parent1Y
+        child1Y = ''.join(child1Y)
+        child2Y = parent2Y
+        child2Y = ''.join(child2Y)   
         
-        for j in range(len(parent1Y)):
-            parent1Y[i]
-            parent2Y[i]
+        children.append((child1X, child1Y))
+        children.append((child2X,child2Y))
+    print(children)
+    return children
     
 def crossover(parents, probability, mutation):
     print("Starting crossover:")
-    children = []
     
     for j in range(len(parents)):               # For each pair
         pair = parents[j]                       # Pair with 2 coordinates each Pair: [{x,y},{x,y}]
@@ -124,7 +147,7 @@ def crossover(parents, probability, mutation):
             yList[:0] = geney                   # Convert it to list
                         
             genePair.append((xList, yList))     # Add the pair of genes to the list
-        combineGenes(genePair,0,0)            
+        combineGenes(genePair,probability,0)            
         
 
         
@@ -166,10 +189,15 @@ def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): 
     print(str(candidates)+"\n")
     print("Parents:")
     pairs = speedDating(populationSize, candidates)          # Function pairs up the candidates as parents :)
-    for i in range(len(pairs)):
-        print("Pair "+str(i+1)+" Mom:"+str(pairs[i][0])+" Dad:"+str(pairs[i][1])+"\n")
         
     binaries = convertToBinary(pairs)
+    
+    for i in range(len(pairs)):
+        print("Pair "+str(i+1)+":\n")
+        print("Mom:"+str(pairs[i][0])+"Binary: "+str(binaries[i][0])+"\n")
+        print("Dad:"+str(pairs[i][1])+"Binary: "+str(binaries[i][1])+"\n")
+        print("_____________________________________________________________________________________")
+        
     crossover(binaries, crossoverProb, mutationProb)           #Function will perform the Reproduction
  
             
@@ -179,4 +207,3 @@ mutationProb =0.2
 numberOfGen = 10
 geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen)
 
-    
