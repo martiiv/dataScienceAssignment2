@@ -177,19 +177,37 @@ def crossover(parents, probability):
         childCandidates.append(children[i-1])     #Adds the pairs of children
         childCandidates.append(children[i])         
     return childCandidates
-                
+
+def convertToNumbers(candidates, populationSize):
+    candidateNumbers = []
+    for i in range(populationSize):
+        candidateX = candidates[i][0]
+        candidateY = candidates[i][1]
+        
+        if candidateX[0] == "1":
+            candidateX = candidateX[2:]
+            newNumberX = int(candidateX,2)
+            newNumberX = 0-newNumberX    
+        else:
+            candidateX = candidateX[2:]
+            newNumberX = int(candidateX,2)
+
+        if candidateY[0] == "1":
+            candidateY = candidateY[2:]
+            newNumberY = int(candidateY,2)
+            newNumberY = 0-newNumberY    
+        else:
+            candidateY = candidateY[2:]
+            newNumberY = int(candidateY,2)
+            
+        candidateNumbers.append((newNumberX,newNumberY))
+    return candidateNumbers
+          
     
-def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): #? We start by defining the main parameters we will use for the GA 
+def geneticAlgorithm(chromosomes, populationSize, crossoverProb, mutationProb, numberOfGen, currentGen): #? We start by defining the main parameters we will use for the GA 
+    
     printStartOfAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen)
     
-    #We start by defining and encoding the chromosomes for our GA, for defining the chromosomes we will be using the fitness function from 1.1
-    chromosomes = []
-    
-    for i in range(populationSize):
-        x = rand.randint(-10,10)                            # Defines the range of x values and picks one random value from the range 
-        y = rand.randint(-10,10)                            # Defines the range of y values and picks one random value from the range
-        chromosomes.append((x,y))                           # Adds coordinate to list
-
     print("List of values: "+str(chromosomes)+" \n")            
     
     results = []                                            #We define the results in a list
@@ -205,8 +223,8 @@ def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): 
         chromAndProb.append((chromosomes[i], probabilities[i]))    
     
     print("Results from fitness function: \n")              
-    for i in range(populationSize):
-        print("Chromosome: "+str(chromAndProb[i][0])+"   Result:"+str(results[i])+" Calculated probability: "+str(chromAndProb[i][1])+"\n")
+    for i in range(populationSize): 
+        print("Chromosome: "+str(chromAndProb[i][0])+"   Result:"+str(results[i])+" Calculated probability: "+str(round(chromAndProb[i][1],2)*100)+"% \n")
         
     print("_____________________________________________________________________________________ \n")
     
@@ -244,13 +262,31 @@ def geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen): 
         print("Child: "+str(i+1)+", Gene: "+str(newCandidates[i])+"\n")
     print("_____________________________________________________________________________________ \n")
     
+    newNumbers = convertToNumbers(newCandidates, populationSize)
+    currentGen = currentGen+1
+    if currentGen == numberOfGen:
+        print("Final children:"+str(newNumbers))
+        
+        return
+    else:
+        print(currentGen)
+        geneticAlgorithm(newNumbers, populationSize, crossoverProb, mutationProb, numberOfGen, currentGen)
+        
     
             
 populationSize = 4
-crossoverProb =0.5
-mutationProb =0.2
-numberOfGen = 10
-geneticAlgorithm(populationSize, crossoverProb, mutationProb, numberOfGen)
+crossoverProb =0.25
+mutationProb =0.05
+numberOfGen = 100
 
-for i in range(numberOfGen):
-    geneticAlgorithm()
+#We start by defining and encoding the chromosomes for our GA, for defining the chromosomes we will be using the fitness function from 1.1
+chromosomes = []
+    
+for i in range(populationSize):
+    x = rand.randint(-10,10)                            # Defines the range of x values and picks one random value from the range 
+    y = rand.randint(-10,10)                            # Defines the range of y values and picks one random value from the range
+    chromosomes.append((x,y))                           # Adds coordinate to list
+
+geneticAlgorithm(chromosomes, populationSize, crossoverProb, mutationProb, numberOfGen, 0)
+
+fitnessFunction()
