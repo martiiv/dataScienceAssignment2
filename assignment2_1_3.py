@@ -59,15 +59,15 @@ def gradientDescent(position, stopCrit, learnRate, maxIt):
             return
             
         
-    print("Maximum iterations reached! \n Selected points: x "+str(round(x))+" y "+str(round(y))+"\n Computed value:"+str(value))
+    print("Maximum iterations reached! \n Selected points: x "+str(x)+" y "+str(y)+"\n Computed value:"+str(value))
      
 
 x = rand.randint(-10,10)                            # Defines the range of x values and picks one random value from the range 
 y = rand.randint(-10,10)                            # Defines the range of y values and picks one random value from the range
 
 startPosition = (x,y)
-stoppingCriteria = 0.01
+stoppingCriteria = 0.001
 learningRate = 0.1
-maximumIterations = 50
+maximumIterations = 100
 
 gradientDescent(startPosition,stoppingCriteria, learningRate, maximumIterations)
