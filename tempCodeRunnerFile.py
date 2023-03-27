@@ -1,2 +1,0 @@
-
-    print(str(candidates)+"\n")
