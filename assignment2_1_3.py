@@ -27,26 +27,22 @@ def gradientDescent(position, stopCrit, learnRate, maxIt):
     print("______________________________________________________________________________ \n")
     
     x,y = position
-    value = fitnessFunction(x,y)    
-    dx, dy = derivatives(position[0], position[1])
     
-    print("Computed value for Function at x,y:  "+str(value)+"\n")    
-    print("Computed value for partial derivative X:  "+str(dx)+"\n")
-    print("Computed value for partial derivative Y:  "+str(dy)+"\n")
-    print("______________________________________________________________________________ \n")
-    
-    
-    ##for i in range(maxIt):
-    #    x = position[0]
-    #    y = position[1]
-    #    
-    #    value = fitnessFunction(x,y)
-    #    xValue = derx
-    #    yValue = dery
+    for i in range(maxIt):
+        print("Iteration:"+str(i)+"\n")
+            
+        value = fitnessFunction(x,y)    
+        dx, dy = derivatives(x, y)
         
-    #    if value<=stopCrit: return
+        print("Computed value for Function at x,y:  "+str(value)+"\n")    
+        print("Computed value for partial derivative X:  "+str(dx)+"\n")
+        print("Computed value for partial derivative Y:  "+str(dy)+"\n")
+        print("______________________________________________________________________________ \n")
         
-    #print("Finished Gradient Descent! \n Final value: "+str(value))
+        x = x-learningRate*dx
+        y = y-learningRate*dy
+    
+    print("Maximum iterations reached! \n Selected points: x "+str(round(x))+" y "+str(round(y))+"\n Computed value:"+str(value))
      
 x = rand.randint(-10,10)                            # Defines the range of x values and picks one random value from the range 
 y = rand.randint(-10,10)                            # Defines the range of y values and picks one random value from the range
@@ -54,6 +50,6 @@ y = rand.randint(-10,10)                            # Defines the range of y val
 startPosition = (x,y)
 stoppingCriteria = 2
 learningRate = 0.1
-maximumIterations = 100
+maximumIterations = 50
 
 gradientDescent(startPosition,stoppingCriteria, learningRate, maximumIterations)
