@@ -281,10 +281,10 @@ def geneticAlgorithm(chromosomes, populationSize, crossoverProb, mutationProb, n
         
     
             
-populationSize = 10
-crossoverProb =0.50
-mutationProb =0.25
-numberOfGen = 1000
+populationSize = 4
+crossoverProb =0.25
+mutationProb =0.05
+numberOfGen = 50
 
 chromosomes = []    
 for i in range(populationSize):
