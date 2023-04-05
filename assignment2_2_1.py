@@ -18,8 +18,8 @@ trainData.plot.scatter(x="1", y="2",c = "label", colormap='viridis')    # Plot f
 label = trainData["label"]                                              #We define the label column
 testLabel = test["label"]
 
-neighbors = 31                                                       #Defining variables
-distanceMethod = "euclidean"
+neighbors = 40                                                        #Defining variables
+distanceMethod = "manhattan"
 
 print("Starting classifier, K = "+str(neighbors)+" Distance method used: "+distanceMethod+"\n")
 
@@ -32,23 +32,15 @@ print("Classifier score: "+str(score)+"\n")
 # Task 2.3 Due to the fact that some values are alot larger than others we will normalize them
 normalizer = pre.MinMaxScaler()                                         # Initialize normalizer 
 
-print("Classifying again with normalized data: \n")
-rawData = trainData.drop(["label"], axis=1)                             # We remove the label column
-normalData = normalizer.fit_transform(rawData)                          # Normalize data 
-newData = pd.DataFrame(normalData, columns= ["1","2","3","4","5","6","7"]) #Create new dataframe
-newData["label"] = label
+#Normalizing train data
+onlyData = trainData.drop(["label"], axis=1)
+normalizedData = normalizer.fit_transform(onlyData)
+finalData = pd.DataFrame(normalizedData, columns=["1","2","3","4","5","6","7"])
+finalData["label"] = label
 
-normalClassifier =  KNeighborsClassifier(n_neighbors=neighbors, metric=distanceMethod)  #Initializing new classifier
-normalClassifier.fit(newData, label)                                                    # Fitting
+#Normalizing test data
+onlyTest = test.drop(["label"], axis=1)
+normalizedTest = normalizer.transform(onlyTest)
+finalTest = pd.DataFrame(normalizedTest, columns=["1","2","3","4","5","6","7"])
+finalTest["label"] = testLabel
 
-rawTest = test.drop(["label"], axis=1)
-testData = normalizer.transform(rawTest)
-
-normalizedTestData = pd.DataFrame(testData, columns= ["1","2","3","4","5","6","7"])
-normalizedTestData["label"]=testLabel
-
-normalPredictor = normalClassifier.predict(normalizedTestData)
-normalScore = normalClassifier.score(normalizedTestData, testLabel)
-
-print(normalPredictor)
-print("Classifier score: "+str(normalScore)+"\n")
