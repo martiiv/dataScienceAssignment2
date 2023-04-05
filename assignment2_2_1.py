@@ -19,7 +19,7 @@ label = trainData["label"]                                              #We defi
 testLabel = test["label"]
 
 neighbors = 40                                                        #Defining variables
-distanceMethod = "manhattan"
+distanceMethod = "chebyshev"
 
 print("Starting classifier, K = "+str(neighbors)+" Distance method used: "+distanceMethod+"\n")
 
@@ -40,7 +40,16 @@ finalData["label"] = label
 
 #Normalizing test data
 onlyTest = test.drop(["label"], axis=1)
-normalizedTest = normalizer.transform(onlyTest)
+normalizedTest = normalizer.fit_transform(onlyTest)
 finalTest = pd.DataFrame(normalizedTest, columns=["1","2","3","4","5","6","7"])
 finalTest["label"] = testLabel
+
+normalizedClassifier = KNeighborsClassifier(n_neighbors=neighbors, metric=distanceMethod)
+
+normalizedClassifier.fit(finalData, label)
+normalPredictor = normalizedClassifier.predict(finalTest)
+print(normalPredictor)
+
+normalizedScore = normalizedClassifier.score(finalTest, finalTest["label"])
+print("Normalized classifier score: "+str(normalizedScore)) 
 
