@@ -12,12 +12,13 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 #We read the csv files like in assignment 1:
 trainData = pd.read_csv("train.csv",encoding="UTF-8")    #Read from csv 
 test = pd.read_csv("test.csv", encoding="UTF-8")    #Reading test data
-print(trainData.head())
 
 trainData.plot.scatter(x="1", y="2",c = "label", colormap='viridis')    # Plot for visualization
 
 label = trainData["label"]                                              #We define the label column
-neighbors = 7                                                       #Defining variables
+testLabel = test["label"]
+
+neighbors = 31                                                       #Defining variables
 distanceMethod = "euclidean"
 
 print("Starting classifier, K = "+str(neighbors)+" Distance method used: "+distanceMethod+"\n")
@@ -28,17 +29,26 @@ predictor = classifier.predict(test)                                    # We pre
 score =classifier.score(test, test["label"])                            # Finds mean accuracy of our classifier 
 print("Classifier score: "+str(score)+"\n")
 
-# Due to the fact that some values are alot larger than others we will normalize them
+# Task 2.3 Due to the fact that some values are alot larger than others we will normalize them
+normalizer = pre.MinMaxScaler()                                         # Initialize normalizer 
+
 print("Classifying again with normalized data: \n")
 rawData = trainData.drop(["label"], axis=1)                             # We remove the label column
-normalizer = pre.MinMaxScaler()                                         # Initialize normalizer 
 normalData = normalizer.fit_transform(rawData)                          # Normalize data 
-newFrame = pd.DataFrame(normalData, columns= ["1","2","3","4","5","6","7"]) #Create new dataframe
-print(newFrame.head())  
+newData = pd.DataFrame(normalData, columns= ["1","2","3","4","5","6","7"]) #Create new dataframe
+newData["label"] = label
 
-normalClassifier =  KNeighborsClassifier(n_neighbors=neighbors, metric=distanceMethod) #Initializing new classifier
-normalClassifier.fit(newFrame, label)                                   # Fitting
-normalPredictor = classifier.predict(test)                              # Classifying
-score = classifier.score(test, test["label"])
-print("Classifier score: "+str(score)+"\n")
+normalClassifier =  KNeighborsClassifier(n_neighbors=neighbors, metric=distanceMethod)  #Initializing new classifier
+normalClassifier.fit(newData, label)                                                    # Fitting
 
+rawTest = test.drop(["label"], axis=1)
+testData = normalizer.transform(rawTest)
+
+normalizedTestData = pd.DataFrame(testData, columns= ["1","2","3","4","5","6","7"])
+normalizedTestData["label"]=testLabel
+
+normalPredictor = normalClassifier.predict(normalizedTestData)
+normalScore = normalClassifier.score(normalizedTestData, testLabel)
+
+print(normalPredictor)
+print("Classifier score: "+str(normalScore)+"\n")
